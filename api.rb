@@ -4,24 +4,27 @@ require 'config/environment'
 
 models = [Proyecto]
 
-# for example: [Legislator, Proyecto] => "legislators|proyectos"
-endpoints = models.map {|m| m.to_s.underscore.pluralize}.join "|"
+# for example: [Parlamentario, Proyecto] => "parlamentarios|proyectos"
+endpoints = models.map do |model| 
+  model.to_s.underscore.pluralize
+end.join "|"
+
 pattern = /^\/(#{endpoints})/
 
 get pattern do
-  # for example: "projectos" => Projecto
+  # for example: "proyectos" => Proyecto
   model = params[:captures][0].singularize.camelize.constantize
   
   # which fields 
-  fields = fields_for params
-  conditions = conditions_for model, params
-  order = order_for model, params
-  pagination = pagination_for params
+  fields = fields_for(params)
+  conditions = conditions_for(model, params)
+  order = order_for(model, params)
+  pagination = pagination_for(params)
   
   if params[:explain] == 'true'
-    results = explain_for model, conditions, fields, order, pagination
+    results = explain_for(model, conditions, fields, order, pagination)
   else
-    results = results_for model, conditions, fields, order, pagination
+    results = results_for(model, conditions, fields, order, pagination)
   end
   
   response['Content-Type'] = 'application/json'
@@ -34,7 +37,7 @@ end
 after pattern do
   Hit.create!(
     :method => params[:captures][0],
-    :query_hash => remove_dots(request.env['rack.request.query_hash']),
+    :query_hash => remove_dots(request.env['rack.request.query_hash']).to_hash,
     :user_agent => request.env['HTTP_USER_AGENT'],
     :created_at => Time.now.utc
   )
