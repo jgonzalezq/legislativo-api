@@ -131,6 +131,27 @@ The Rakefile for this project defines a task to go through and create any databa
 
 The API will syndicate all data in the collections for the models defined in the application, no matter how that data gets there. This project includes an optional basic task running system for scripts that find data to load into the API.
 
+Any .rb files inside the "tasks" directory will automatically generate a rake task. For example, a file named 
 
+  tasks/get_proyectos.rb
+  
+will generate:
 
-Any .rb files inside the "tasks" directory will automatically...
+  rake tasks:get_proyectos
+
+Every task file should have a class inside it that is named after its filename - so "get_proyectos.rb" should have a class named "GetProyectos".  This class needs one class method: "run", which takes as an argument an optional hash of options. For example:
+
+  class GetProyectos
+    def self.run(options = {})
+      
+    end
+  end
+
+Any command line arguments presented in "key=value" form will be passed into the options hash. For example:
+
+  rake task:get_proyectos session=100 debug=true
+
+will result in a call to:
+
+  GetProyectos.run({:session => "100", :debug => "true"})
+

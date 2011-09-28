@@ -25,7 +25,7 @@ end
 Dir.glob('tasks/*.rb').each do |file|
   name = File.basename file, File.extname(file)
   
-  namespace :task do
+  namespace :tasks do
     task name.to_sym => :environment do
       run_task name
     end
@@ -36,7 +36,7 @@ end
 def run_task(name)
   # pass in command line flags as options to the task
   # for example:
-  # "rake task:get_legislators debug=true" 
+  # "rake task:get_proyectos session=100 debug=true" 
   # becomes:
   # GetLegislators.run({:debug => "true"})
   options = {}
