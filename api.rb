@@ -15,10 +15,15 @@ get pattern do
   # for example: "proyectos" => Proyecto
   model = params[:captures][0].singularize.camelize.constantize
   
-  # which fields 
+  # which fields to request on each document
   fields = fields_for(params)
+  
+  # fields to filter
   conditions = conditions_for(model, params)
+  
+ 
   order = order_for(model, params)
+  
   pagination = pagination_for(params)
   
   if params[:explain] == 'true'
