@@ -34,12 +34,24 @@ end
 
 
 def run_task(name)
-  # pass in command line flags as options to the task
+  # establish mysql connection from details in config.yml
+  require 'mysql2'
+  mysql = Mysql2::Client.new(
+    :hostname => config[:mysql][:hostname], 
+    :username => config[:mysql][:username], 
+    :password => config[:mysql][:password], 
+    :database => config[:mysql][:database]
+  )
+
+  # pass in command line flags as options to the task, and always pass the mysql connection
   # for example:
   # "rake task:get_proyectos session=100 debug=true" 
   # becomes:
-  # GetLegislators.run({:debug => "true"})
-  options = {}
+  # GetLegislators.run({:session => "100", :debug => "true", :mysql => mysql})
+  
+  options = {:mysql => mysql}
+  
+  # iterate through each command line argument
   ARGV[1..-1].each do |arg|
     key, value = arg.split '='
     if key.present? and value.present?
@@ -47,9 +59,15 @@ def run_task(name)
     end
   end
   
+  # log the start of the task
   start = Time.now
+  
+  # load the task and class by name and call the "run" method on that class
   load "tasks/#{name}.rb"
   name.camelize.constantize.run options
   
-  puts "Completed running #{name} in #{Time.now - start}s"
+  # time to run in seconds
+  duration = Time.now - start
+  
+  puts "Completed running #{name} in #{duration}s"
 end

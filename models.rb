@@ -1,13 +1,15 @@
-# Spanish for 'bill'
 class Proyecto
   include Mongoid::Document
   include Mongoid::Timestamps
 
   index :identifier
-  index :coauthor_ids
-  index :coauthor_count
-  index :author_id
-  index "author.region"
+end
+
+class Parlamentario
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  
+  index :identifier
 end
 
 

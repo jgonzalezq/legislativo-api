@@ -2,19 +2,11 @@
   host: localhost
   database: inteligente
   raise_not_found_error: false
+  
+:mysql:
+  :host: localhost
+  :username: 
+  :password: 
+  :database: inteligente
 
 :log_file: /dev/null
-
-:email:
-  :via: :smtp
-  :to:
-    -
-  :from:
-  :via_options:
-    :address:
-    :port:
-    :user_name:
-    :password:
-    :authentication: plain
-    :domain:
-    :enable_starttls_auto: false

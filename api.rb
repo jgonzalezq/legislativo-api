@@ -2,7 +2,7 @@
 
 require 'config/environment'
 
-models = [Proyecto]
+models = [Proyecto, Parlamentario]
 
 # for example: [Parlamentario, Proyecto] => "parlamentarios|proyectos"
 endpoints = models.map do |model| 

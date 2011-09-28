@@ -1,4 +1,4 @@
-= API =
+= API Design and Features =
 
 The API is designed as a very thin layer over MongoDB. Each collection of data has a single URL endpoint. For example, data from the "proyectos" collection can be found by doing a GET request to:
 
@@ -118,18 +118,11 @@ And then in the project directory, type "irb". The app will load its environment
   => 1
 
 
-= Rake tasks =
-
-Ruby uses a "Rakefile" to manage command line tasks that execute Ruby code. "rake" should be installed to the system, either as a system package or as a gem. To see the list of command line tasks defined in the Rakefile, run:
-
-  rake -T
-
-The Rakefile for this project defines a task to go through and create any database indexes that haven't yet been created, and...
-
-
 = Loading data into the API =
 
-The API will syndicate all data in the collections for the models defined in the application, no matter how that data gets there. This project includes an optional basic task running system for scripts that find data to load into the API.
+The API will syndicate all data in the collections for the models defined in the application, no matter how that data gets there. This project includes an optional simple task system to load data into the API.
+
+This system uses Rake. Ruby uses a Rakefile to manage command line tasks that execute Ruby code. "rake" should be installed to the system, either as a system package or as a gem.
 
 Any .rb files inside the "tasks" directory will automatically generate a rake task. For example, a file named 
 
@@ -143,7 +136,7 @@ Every task file should have a class inside it that is named after its filename -
 
   class GetProyectos
     def self.run(options = {})
-      
+      # load in code
     end
   end
 
