@@ -1,3 +1,10 @@
+class Proyecto
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  index :identifier
+end
+
 class Comision
   include Mongoid::Document
   include Mongoid::Timestamps
