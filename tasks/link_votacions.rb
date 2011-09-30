@@ -21,7 +21,7 @@ class LinkVotacions
       votante_ids = []
       
       query = "Select * from VotacionParlamentario where id_votacion = #{votacion['id_votacion']}"
-      options[:mysql].query(query).each do |link|
+      options[:mysql].query(query).entries.each do |link|
         if parlamentario = Parlamentario.where(:id_parlamentario => link['id_parlamentario']).first
           votante_ids << {
             :id_parlamentario => parlamentario['id_parlamentario'],

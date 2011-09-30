@@ -1,3 +1,4 @@
+/config.ru
 /config/config.yml
 /vendor/gems
 /.bundle
