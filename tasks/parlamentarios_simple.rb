@@ -12,11 +12,8 @@ class ParlamentariosSimple
       # if it already exists, find it, otherwise, create it
       parlamentario = Parlamentario.find_or_initialize_by(:identifier => row['id_parlamentario'])
       
-      parlamentario.attributes = {
-        :nombre => row["nombre"],
-        :apellidos => row["apellidos"],
-        :senador_diputado => row["senador_diputado"]
-      }
+      # override any fields that are there
+      parlamentario.attributes = TaskUtils.clean_row(row)
       
       if parlamentario.save
         count += 0

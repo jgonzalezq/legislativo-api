@@ -71,3 +71,25 @@ def run_task(name)
   
   puts "Completed running #{name} in #{duration}s"
 end
+
+
+# utility functions common to the loading tasks
+
+class TaskUtils
+  
+  def self.clean_row(row)
+    row.each do |key, value|
+      if value == ""
+        row[key] = nil
+      elsif value.is_a?(Date)
+        row[key] = date_for(value)
+      end
+    end
+    row
+  end
+  
+  def self.date_for(date)
+    date ? date.strftime("%Y-%m-%d") : nil
+  end
+  
+end
