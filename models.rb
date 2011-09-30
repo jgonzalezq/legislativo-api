@@ -21,6 +21,14 @@ class Comision
   include Mongoid::Timestamps
 
   index :id_comision
+  
+  def self.basic_fields
+    [
+      :id_comision, :nombre, :tipo, :camara, :contacto_mail, 
+      :contacto_tel, :contacto_form, :abogado_secretario, :abogado_ayudante,
+      :secretario_ejecutivo
+    ]
+  end
 end
 
 class Parlamentario
