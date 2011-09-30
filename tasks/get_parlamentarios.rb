@@ -1,4 +1,4 @@
-class ParlamentariosSimple
+class GetParlamentarios
   
   def self.run(options = {})
     count = 0
@@ -7,7 +7,7 @@ class ParlamentariosSimple
     options[:mysql].query("select * from Parlamentario").each do |row|
       
       # if it already exists, find it, otherwise, create it
-      parlamentario = Parlamentario.find_or_initialize_by(:identifier => row['id_parlamentario'])
+      parlamentario = Parlamentario.find_or_initialize_by(:id_parlamentario => row['id_parlamentario'])
       
       # override any fields that are there
       parlamentario.attributes = TaskUtils.clean_row(row)

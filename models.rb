@@ -2,21 +2,21 @@ class Proyecto
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  index :identifier
+  index :id_proyecto_ley
 end
 
 class Comision
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  index :identifier
+  index :id_comision
 end
 
 class Parlamentario
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  index :identifier
+  index :id_parlamentario
 end
 
 

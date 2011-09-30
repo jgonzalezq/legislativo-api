@@ -5,7 +5,7 @@ class GetComisions
     count = 0
     
     options[:mysql].query("select * from Comision").each do |row|
-      comision = Comision.find_or_initialize_by(:identifier => row["id_comision"])
+      comision = Comision.find_or_initialize_by(:id_comision => row["id_comision"])
       
       comision.attributes = TaskUtils.clean_row row
       

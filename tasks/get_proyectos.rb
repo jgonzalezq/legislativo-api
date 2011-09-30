@@ -5,7 +5,7 @@ class GetProyectos
     count = 0
     
     options[:mysql].query("select * from ProyectoLey").each do |row|
-      proyecto = Proyecto.find_or_initialize_by(:identifier => row["id_proyecto_ley"])
+      proyecto = Proyecto.find_or_initialize_by(:id_proyecto_ley => row["id_proyecto_ley"])
       
       proyecto.attributes = TaskUtils.clean_row row
       
