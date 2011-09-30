@@ -1,4 +1,4 @@
-class Proyecto
+class Comision
   include Mongoid::Document
   include Mongoid::Timestamps
 

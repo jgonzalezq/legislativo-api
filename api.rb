@@ -19,24 +19,27 @@ get pattern do
   # fields to filter
   conditions = conditions_for(model, params)
   
- 
+  # how to order the results
   order = order_for(model, params)
   
+  # how to paginate the results
   pagination = pagination_for(params)
   
+  # decide whether this is an explanation response, or a normal response
   if params[:explain] == 'true'
     results = explain_for(model, conditions, fields, order, pagination)
   else
     results = results_for(model, conditions, fields, order, pagination)
   end
   
+  # serialize to JSON and return it
   response['Content-Type'] = 'application/json'
   json = results.to_json
   params[:callback].present? ? "#{params[:callback]}(#{json});" : json
 end
 
-# log all hits in the database
 
+# log all hits in the database
 after pattern do
   Hit.create!(
     :method => params[:captures][0],
@@ -45,6 +48,7 @@ after pattern do
     :created_at => Time.now.utc
   )
 end
+
 
 
 helpers do
