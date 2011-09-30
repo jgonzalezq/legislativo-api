@@ -79,17 +79,26 @@ class TaskUtils
   
   def self.clean_row(row)
     row.each do |key, value|
+      
+      # turn empty strings into nil, and 
       if value == ""
         row[key] = nil
+        
+      # turn Date objects into basic strings
       elsif value.is_a?(Date)
-        row[key] = date_for(value)
+        row[key] = value.strftime("%Y-%m-%d")
+      
       end
     end
+    
     row
   end
   
-  def self.date_for(date)
-    date ? date.strftime("%Y-%m-%d") : nil
+  def self.allowed_fields(document, fields)
+    attributes = document.attributes.dup
+    allowed_keys = fields.map {|f| f.to_s}
+    attributes.keys.sort.each {|key| attributes.delete(key) unless allowed_keys.include?(key)}
+    attributes
   end
   
 end
