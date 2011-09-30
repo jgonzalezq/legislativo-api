@@ -15,7 +15,10 @@ class GetComisions
       else
         puts "Failed to save a comision, errors: #{comision.errors.full_messages.join ', '}"
       end
+      
     end
+    
+    puts "Saved #{count} comisions"
     
   end
   
