@@ -11,7 +11,7 @@ class GetComisions
       
       if comision.save
         count += 1
-        puts "[#{comision['identifier']}] Updated comision"
+        puts "[#{comision['id_comision']}] Updated comision"
       else
         puts "Failed to save a comision, errors: #{comision.errors.full_messages.join ', '}"
       end

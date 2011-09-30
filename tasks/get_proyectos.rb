@@ -11,9 +11,9 @@ class GetProyectos
       
       if proyecto.save
         count += 1
-        puts "[#{proyecto['identifier']}] Updated proyecto"
+        puts "[#{proyecto['id_proyecto_ley']}] Updated proyecto"
       else
-        puts "Failed to save a comision, errors: #{proyecto.errors.full_messages.join ', '}"
+        puts "Failed to save a proyecto, errors: #{proyecto.errors.full_messages.join ', '}"
       end
       
     end
