@@ -36,6 +36,20 @@ class Parlamentario
   include Mongoid::Timestamps
   
   index :id_parlamentario
+  
+  def self.basic_fields
+    [
+      :activo, :apellidos, :cargos_eleccion, :cargos_gobierno, :comisiones_actuales, 
+      :comisiones_anteriores, :comite_parlamentario, :declaracion_interes, 
+      :declaracion_patrimonio, :dietas, :educacion_postgrado, :educacion_universitaria, 
+      :experiencia_laboral, :experiencia_politica, :facebook, :fecha_nacimiento, 
+      :financiamiento_electoral2005, :gasto_electoral2005, :id_circunscripcion, 
+      :id_parlamentario, :id_parlamento, :id_partido, :mail, :mesa_directiva, :nombre, 
+      :pacto, :periodos_diputado, :periodos_diputado_desc, :periodos_senador, 
+      :periodos_senador_desc, :primera_vez, :profesion, :senador_diputado, :sexo, 
+      :twitter, :voto_nro, :voto_porcentaje, :web
+    ]
+  end
 end
 
 class Votacion
