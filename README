@@ -148,3 +148,29 @@ will result in a call to:
 
   GetProyectos.run({:session => "100", :debug => "true"})
 
+
+= Running the app =
+
+Sinatra apps can be run using any system that supports Rack apps. You can run it using Unicorn on both development and production.
+
+Unicorn is a part of the Gemfile for this application. To run unicorn in development, run:
+
+  bundle exec unicorn
+  
+This will run the app on http://localhost:8080 by default. To change the port, add a --port flag.
+
+To run unicorn in production, first install the "rack" gem to your system, using the same version that is required by the Gemfile. Then install the "unicorn" gem to your system. 
+
+If you're using the same system to host different apps that use different versions of rack, you may find it more convenient to install rack and/or unicorn to the user, and not the system. This requires exporting the GEM_HOME environment variable to add a user-editable directory to the gem path. For example:
+
+  export GEM_HOME=$HOME/.gem/ruby/1.8
+
+You can test this by running "gem env" and seeing this directory included under "GEM PATHS". You can then install gems system-wide by running "sudo gem install [gemname]" and install gems user-wide by running "gem install [gemname]".
+
+Once you've installed unicorn and rack, you can instruct unicorn to listen to a UNIX socket and run as a daemon by running:
+
+  unicorn -l ~/wherever/app_name.sock -D
+
+You can also define a unicorn.rb config file and use it to specify a PID file - rather than document that here, it's better to refer to the documentation:
+
+http://unicorn.bogomips.org/
