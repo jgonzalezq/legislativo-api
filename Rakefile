@@ -26,6 +26,7 @@ Dir.glob('tasks/*.rb').each do |file|
   name = File.basename file, File.extname(file)
   
   namespace :tasks do
+    desc "Run tasks/#{name}.rb"
     task name.to_sym => :environment do
       run_task name
     end
