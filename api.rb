@@ -199,6 +199,7 @@ end
 # becomes"
 # {"title" => {"given_at" => "foo"}}
 
+# used in storing Hits for analytics.
 # this is done because MongoDB cannot store field names with dots in them.
 
 def remove_dots(hash)
