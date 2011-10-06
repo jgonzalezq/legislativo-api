@@ -69,6 +69,7 @@ class Debate
   index :comision_sala
   index :camara
   index :comisiones_unidas
+  index :tags
 end
 
 
