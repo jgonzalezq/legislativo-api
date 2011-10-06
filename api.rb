@@ -157,12 +157,6 @@ helpers do
     {:per_page => per_page, :page => page}
   end
   
-  def regex_for(value, i = true)
-    regex_value = value.dup
-    %w{+ ? . * ^ $ ( ) [ ] { } | \ }.each {|char| regex_value.gsub! char, "\\#{char}"}
-    i ? /#{regex_value}/i : /#{regex_value}/
-  end
-  
   def value_for(value, field)
     
     if field  # the field type is overridden in model
