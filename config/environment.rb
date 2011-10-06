@@ -29,7 +29,7 @@ end
 require 'models'
 
 def models
-  [Parlamentario, Comision, Proyecto, Votacion]
+  [Parlamentario, Comision, Proyecto, Votacion, Debate]
 end
 
 # reload changes made in development to key files without having to restart the server

@@ -60,6 +60,18 @@ class Votacion
   index :id_proyecto_ley
 end
 
+class Debate
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  
+  index :id_debate
+  index :id_proyecto_ley
+  index :comision_sala
+  index :camara
+  index :comisiones_unidas
+end
+
+
 # record information about every API request
 class Hit
   include Mongoid::Document
