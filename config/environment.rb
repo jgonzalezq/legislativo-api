@@ -3,7 +3,7 @@ require 'sinatra'
 require 'mongoid'
 require 'tzinfo'
 
-# disable logging 
+# disable logging
 set :logging, false
 
 
@@ -15,11 +15,11 @@ end
 
 # this block runs only once when the server is started
 configure do
-  
+
   # configure Mongoid to point to the specified MongoDB server
   config[:mongoid][:logger] = Logger.new config[:log_file] if config[:log_file]
   Mongoid.configure {|c| c.from_hash config[:mongoid]}
-  
+
   # A default time zone for when people search by date (with no time), or a time that omits the time zone
   Time.zone = ActiveSupport::TimeZone.find_tzinfo "America/Santiago"
 end
@@ -29,7 +29,12 @@ end
 require 'models'
 
 def models
-  [Parlamentario, Comision, Proyecto, Votacion, Debate]
+  [
+    Bill,
+    BillExternalReference,
+    StageHistory,
+    Hit
+  ]
 end
 
 # reload changes made in development to key files without having to restart the server
@@ -42,24 +47,24 @@ end
 # special fields used by the system, cannot be used on a model (on the top level)
 def magic_fields
   [
-    # reserve this for use in JSONP support 
-    :callback, 
-    
+    # reserve this for use in JSONP support
+    :callback,
+
     # jQuery uses this to bust caches, allow this and don't try to filter on it as a field
-    :_, 
-    
+    :_,
+
     # Sinatra uses this as a keyword to do route parsing
     :captures,
-    
+
     # allow for specifying of partial fields
     :fields,
-    
+
     # trigger an explanation of the query
     :explain,
-    
+
     # sorting parameters
     :sort, :order,
-    
+
     # pagination parameters
     :page, :per_page
   ]
