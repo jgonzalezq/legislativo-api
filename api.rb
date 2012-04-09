@@ -174,8 +174,12 @@ helpers do
     criteria = criteria_for(model, conditions)
 
     documents = criteria.to_a
-    # deletes only the first document
-    documents[0].delete
+
+    # validates if one or more documents were returned
+    if documents.size >= 1
+      # deletes only the first document
+      documents[0].delete
+    end
   end
 
   # Inserts documents into the database
