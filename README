@@ -2,7 +2,7 @@
 
 The API is designed as a very thin layer over MongoDB. Each collection of data has a single URL endpoint. For example, data from the "proyectos" collection can be found by doing a GET request to:
 
-  /proyectos
+  /bills
 
 This will return a page of proyectos in JSON form, in order of their creation in the database. The query that fetches these proyectos can be controlled in a number of ways.
 
@@ -11,17 +11,17 @@ This will return a page of proyectos in JSON form, in order of their creation in
 
 To control the sort order of results:
 
-  /proyectos?sort=ingreso
-  /proyectos?sort=ingreso&order=asc
-  /proyectos?sort=ingreso&order=desc
-  
-  
-== Pagination ==  
+  /bills?sort=id
+  /bills?sort=id&order=asc
+  /bills?sort=id&order=desc
+
+
+== Pagination ==
 
 By default, results are paginated to 20 items per page, and the first page is returned. To control pagination:
 
-  /proyectos?per_page=10&page=2
-  
+  /bills?per_page=10&page=2
+
 All results also return a "count" field that lists how many total items match the query, and a "page" object with three subfields: the actual"page" and "per_page" values that were used in the query, and a "count" field that has the actual number of items returned (this is useful if there are fewer items in the results for that page than the "per_page" parameter specifies).
 
 
@@ -29,13 +29,13 @@ All results also return a "count" field that lists how many total items match th
 
 Results can be filtered by specifying fields and values. For example, to return all pryectos whose "iniciativa" field is "Mensaje":
 
-  /proyectos?iniciativa=Mensaje
-  
+  /bills?creation_date=01-01-1990
+
 Filters can be combined, and used alongside other parameters:
 
-  /proyectos?iniciativa=Mensaje&meses_en_tramite=1&sort=ingreso
+  /bills?creation_date=01-01-1990&tags=health&sort=creation_date
 
-The API will try to infer the type of the values that are given. Values that contain only digits will be interpreted as numbers, and timestamps of the format "YYYY-MM-DD" or that begin with "YYYY-MM-DDTHH:MM:SS" will be interpreted as Time objects. "true" and "false" will be interpreted as booleans. 
+The API will try to infer the type of the values that are given. Values that contain only digits will be interpreted as numbers, and timestamps of the format "YYYY-MM-DD" or that begin with "YYYY-MM-DDTHH:MM:SS" will be interpreted as Time objects. "true" and "false" will be interpreted as booleans.
 
 To override these assumptions for a particular field, you can declare the field's type in that model's Mongoid declaration, and no type inference will be done for the given value.
 
@@ -46,14 +46,14 @@ This is not implemented yet, but the filtering could be easily extended to add o
 
 To return only specific fields for each result, specify a comma-separated list of fields. You can specify nested fields by using the dot operator.
 
-  /proyectos?fields=trata,ingreso,proyecto_id,autore.last_name
+  /bills?fields=matters,tags,summary,title
 
 
 == Query explanation ==
 
 To see an explanation, in JSON, of how the API transforms the parameters you provide into a MongoDB query, provide an "explain" parameter. This is meant for debugging, and will only return the explanation, not the results.
 
-  /proyectos?explain=true
+  /bills?explain=true
 
 This will return the fields, conditions, sort parameters, and pagination information that were used to form the query, and the formal database explanation for how that query is processed.
 
@@ -62,7 +62,7 @@ This will return the fields, conditions, sort parameters, and pagination informa
 
 JSON results can be returned with a function callback wrapped around the results, for use in "JSONP", a method for retrieving data from remote services through embedded JavaScript. To trigger this, send in a "callback" parameter with the name of the JavaScript function name you want wrapped around the results.
 
-  /proyectos?callback=myCallback
+  /bills?callback=myCallback
 
 If you use jQuery's AJAX methods, it will take care of this automatically for you, but will also add a "_" parameter with a timestamp value that acts as a "cache-buster". This API will not do anything special when it sees this parameter, but it knows to ignore it and to not try to filter results based on a field named "_".
 
@@ -91,7 +91,7 @@ However, you can cache the specific gem files you use so that you do not have to
 This will create a "vendor/cache" directory which contains .gem files of all dependencies. This *can* be committed to the repository, and future dependency installation can be accomplished directly from those .gem files by using:
 
   bundle install --path=vendor/gems --local
-  
+
 This is particularly useful when automating deployment of code to a remote system.
 
 
@@ -101,53 +101,21 @@ In order to get a console, create or update your $HOME/.irbrc file with this:
 
   # use rubygems
   require 'rubygems'
-  
+
   # load in project-specific dependencies through bundler
   require 'bundler/setup'
-  
+
   # load in that project's environment if it exists
   require 'config/environment' if File.exists?('config/environment.rb')
 
 And then in the project directory, type "irb". The app will load its environment, and you will see an error if it cannot connect to the database. You can reference models and make database queries through the ORM, or run any Ruby you want.
 
-  >> Proyecto.count
+  >> Bill.count
   => 0
-  >> Proyecto.create!(:title => "Proyecto de ley en materia de duración del descanso de maternidad.")
+  >> Bill.create!(:title => "Proyecto de ley en materia de duración del descanso de maternidad.")
   => #<Proyecto _id: 4e7cae54ae85c114b4000001, created_at: Fri Sep 23 16:05:40 UTC 2011, updated_at: Fri Sep 23 16:05:40 UTC 2011, _type: nil, title: "Proyecto de ley en materia de duraci\303\263n del descanso de maternidad.">
   >> Proyecto.count
   => 1
-
-
-= Loading data into the API =
-
-The API will syndicate all data in the collections for the models defined in the application, no matter how that data gets there. This project includes an optional simple task system to load data into the API.
-
-This system uses Rake. Ruby uses a Rakefile to manage command line tasks that execute Ruby code. "rake" should be installed to the system, either as a system package or as a gem.
-
-Any .rb files inside the "tasks" directory will automatically generate a rake task. For example, a file named 
-
-  tasks/get_proyectos.rb
-  
-will generate:
-
-  rake tasks:get_proyectos
-
-Every task file should have a class inside it that is named after its filename - so "get_proyectos.rb" should have a class named "GetProyectos".  This class needs one class method: "run", which takes as an argument an optional hash of options. For example:
-
-  class GetProyectos
-    def self.run(options = {})
-      # load in code
-    end
-  end
-
-Any command line arguments presented in "key=value" form will be passed into the options hash. For example:
-
-  rake task:get_proyectos session=100 debug=true
-
-will result in a call to:
-
-  GetProyectos.run({:session => "100", :debug => "true"})
-
 
 = Running the app =
 
@@ -156,10 +124,10 @@ Sinatra apps can be run using any system that supports Rack apps. You can run it
 Unicorn is a part of the Gemfile for this application. To run unicorn in development, run:
 
   bundle exec unicorn
-  
+
 This will run the app on http://localhost:8080 by default. To change the port, add a --port flag.
 
-To run unicorn in production, first install the "rack" gem to your system, using the same version that is required by the Gemfile. Then install the "unicorn" gem to your system. 
+To run unicorn in production, first install the "rack" gem to your system, using the same version that is required by the Gemfile. Then install the "unicorn" gem to your system.
 
 If you're using the same system to host different apps that use different versions of rack, you may find it more convenient to install rack and/or unicorn to the user, and not the system. This requires exporting the GEM_HOME environment variable to add a user-editable directory to the gem path. For example:
 
