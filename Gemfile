@@ -16,9 +16,6 @@ group :development do
   gem 'sinatra-reloader', '0.5.0'
   gem 'wirble'
   gem 'rack', '1.3.2'
-  
+
   gem 'unicorn'
 end
-
-# HTML fetching and parsing
-gem 'mysql2', '0.3.7'
